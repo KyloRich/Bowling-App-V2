@@ -2,38 +2,43 @@ package com.codingsm.bowler_app;
 
 public class Frame {
 	
-	public char b1;
-	public char b2;
-	public boolean isSpare = false;
-	public boolean isStrike = false;
-	public Frame nextFrame;
-	
-	Frame (char b1, char b2){
-		if (b1 == 'X' || Character.getNumericValue(b1) == 10) {
-			b1 = ' ';
-			b2 = 'X';
+
+	public static int frame = 1;
+	public int b1;
+	public int b2;
+	// -1 = STRIKE
+	// -2 = SPARE
+	// 0  = OPEN
+	public int score = 0;
+	public boolean isStrike;
+	public boolean isSpare;
+
+	Frame (char ball1, char ball2) throws FrameException{
+		if (ball1 == 'X') {
+			b1 = 10;
+			b2 = -1;
 			isStrike = true;
-			System.out.println("\nSTRRRRRIKE!!!!");
-			
+			System.out.println("STRRRRRIKE!!!!");
+			return;
 		}
-		if (Character.getNumericValue(b1) + Character.getNumericValue(b2) == 10) {
+		b1 = Character.getNumericValue(ball1);
+		b2 = Character.getNumericValue(ball2);
+		if (b1 < 0 || b2 < 0)
+			throw new FrameException("Entered invalid pin count!");
+			
+		if ((b1 + b2) == 10) {
 			isSpare = true;
-			System.out.println("\nPicked up the spare!");
-			
+			System.out.println("Picked up the spare!");
+			return;
 		}
-		this.b1 = b1;
-		this.b2 = b2;
+		if ((b1 + b2) < 10) {
+			System.out.println("Open frame - Oops!");
+			return;
+		}
+		throw new FrameException("Entered invalid pin count!");
 	}
 	
 	public int getScore() {
-		if (isStrike)
-			return 11;
-		if (isSpare)
-			return 10;
-		else 
-			return Character.getNumericValue(b1) + Character.getNumericValue(b2);
+		return 0;
 	}
 }
-
-
- 
